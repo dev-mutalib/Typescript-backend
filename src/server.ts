@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import connectDB from './config/db';
 
 dotenv.config();
 
@@ -14,6 +15,12 @@ app.get('/', (req: Request, res: Response) => {
 
 const PORT = process.env.PORT || 7000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+connectDB()
+.then(()=>{
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+})
+.catch((error)=>{
+  throw new Error(error.message)
+})
